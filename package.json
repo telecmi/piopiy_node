@@ -1,0 +1,17 @@
+{
+  "name": "incoming-call",
+  "version": "1.0.0",
+  "description": "PIOPIY NodeJS example",
+  "main": "playvoice.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "piopi-node"
+  ],
+  "author": "Murugan Pandian",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}

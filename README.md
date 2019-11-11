@@ -1,2 +1,2 @@
-# piopy-node
-PIOPIY NodeJS example  for Incoming and Outgoing to india
+# PIOPIY NodeJS SDK
+PIOPIY REST API client for nodejs,It support Voice,SMS and more.

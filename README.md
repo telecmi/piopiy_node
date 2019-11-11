@@ -1,6 +1,7 @@
 # PIOPIY NodeJS SDK
 
-The Node.js SDK makes it simpler to integrate communications into your Node.js applications using the PIOPIY REST API. Using the SDK, you will be able to make voice calls and can control your call flows.
+
+The Node.js SDK is used to integrate communications into your Node.js applications using the PIOPIY REST API. Using the SDK, you will be able to make voice calls and can control your call flows.
 
 ## Install
 
@@ -13,33 +14,31 @@ Prerequisites for javascript web server.
 - <a href="https://nodejs.org/en/" target="_blank">node.js</a> (>= v10.16.3 required)
 - <a href="https://www.npmjs.com/" target="_blank">npm</a> (>= 6.9.0 required)
 
-### Install SDK using npm
+## Installation
+
+Install the SDK using npm
 
 ```bash
 $ npm install piopiy
 ```
-## Required Parameters
-
-These are the required parameters to make a call.
-
-| Parameter Name           | Type   |      Description                                            |
-|  ---                     |    --- | ---                                                         | 
-| your_app_id              | number | Your app id                                                 | 
-| your_app_secret          | string | Your app secret                                             | 
-| your_to_number           | number | The number the call was made to                             | 
-| your_piopiy_phone_number | number | Your caller id for this call                                | 
-| your_answer_url          | string | Your webserver URL contains list of action                  | 
 
 
+### Authentication
 
-## Make a call
+In order to authenticate your app, and to make an API request, you should have an app id and secret for authentication. Find your App ID and secret in your <a href="https://doc.telecmi.com/piopiy/docs/build-app#app-id-and-secret" target="_blank">PIOPIY dashboard</a>
+
+Specifiy the authentication credentials 
+
 ```javascript
 const Piopiy = require( 'piopiy' );
-const piopiy = new Piopiy( 
-    'your_app_id', 
-    'your_app_secret' 
-    );
+const piopiy = new Piopiy( 'your_app_id', 'your_app_secret' );
+```
 
+### Make a call
+
+To make a call, mention the to_number, piopiy_phone_number and <a href="https://doc.telecmi.com/piopiy/docs/configure-url" target="_blank">answer_url</a>.
+
+```javascript
 piopiy.voice.make( 
     'your_to_number', 
     'your_piopiy_phone_number',
@@ -50,7 +49,12 @@ piopiy.voice.make(
      console.log( error )
 } );
 ```
+### More Examples
 
+Refer to the <a href="https://doc.telecmi.com/piopiy/docs/pcmo-overview" target="_blank">piopiy docs</a> for more examples. Now create the <a href="https://doc.telecmi.com/piopiy/docs/get-started#signup" target="_blank">PIOPIY account</a> and setup the express server and test out your integration in few minutes.
 
+### Reporting issues
+
+For any feedbacks and problems, you can <a href="https://github.com/telecmi/piopiy_node/issues" >open an issue on github</a>.
 
 

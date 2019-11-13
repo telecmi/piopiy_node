@@ -1,3 +1,5 @@
+
+
 exports.isString = ( obj ) => {
     return !!( obj === '' || ( obj && obj.charCodeAt && obj.substr ) );
 }
@@ -15,6 +17,10 @@ exports.isUrl = ( string ) => {
     }
 }
 
-exports.isIndno = ( no ) => {
+exports.isArray = ( no ) => {
+    return Array.isArray( no );
+}
 
+exports.isObject = ( obj ) => {
+    return obj !== undefined && obj !== null && obj.constructor == Object;
 }

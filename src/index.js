@@ -1,6 +1,7 @@
 
 import voice from './voice/call';
 import _ from './underscore/index';
+import action from './action/action';
 
 
 
@@ -30,7 +31,7 @@ Piopiy.prototype.voice = voice;
 module.exports = Piopiy;
 
 
-
+module.exports.Action = action;
 
 
 

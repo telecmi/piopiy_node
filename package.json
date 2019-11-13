@@ -1,6 +1,6 @@
 {
   "name": "piopiy",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "PIOPIY REST API client for nodejs,It support Voice,SMS and more.",
   "main": "lib/index.js",
   "scripts": {

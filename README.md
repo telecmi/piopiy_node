@@ -43,12 +43,68 @@ piopiy.voice.make(
     'your_to_number', 
     'your_piopiy_phone_number',
     'your_answer_url' 
-).then( ( answer_url ) => {
-     console.log( answer_url )
-} ).catch( ( err ) => {
+).then( ( result  ) => {
+     console.log( result  )
+} ).catch( ( error ) => {
      console.log( error )
 } );
 ```
+
+### Hold a call
+
+To hold a call, mention the cmiuuid of the call.
+
+```javascript
+piopiy.voice.hold( 
+    'cmiuuid'
+).then( ( result  ) => {
+     console.log( result  )
+} ).catch( ( error ) => {
+     console.log( error )
+} );
+```
+
+### Unhold a call
+
+To unhold a call, mention the cmiuuid of the call.
+
+```javascript
+piopiy.voice.unhold( 
+    'cmiuuid'
+).then( ( result  ) => {
+     console.log( result  )
+} ).catch( ( error ) => {
+     console.log( error )
+} );
+```
+
+### Toggle a call
+
+To toggle a call, mention the cmiuuid of the call.
+
+```javascript
+piopiy.voice.toggle( 
+    'cmiuuid'
+).then( ( result  ) => {
+     console.log( result  )
+} ).catch( ( error ) => {
+     console.log( error )
+} );
+```
+### Hangup a call
+
+To hangup a call, mention the cmiuuid of the call.
+
+```javascript
+piopiy.voice.hangup( 
+    'cmiuuid'
+).then( ( result  ) => {
+     console.log( result )
+} ).catch( ( error ) => {
+     console.log( error )
+} );
+```
+
 ### More Examples
 
 Refer to the <a href="https://doc.telecmi.com/piopiy/docs/pcmo-overview" target="_blank">piopiy docs</a> for more examples. Now create the <a href="https://doc.telecmi.com/piopiy/docs/get-started#signup" target="_blank">PIOPIY account</a> and setup the express server and test out your integration in few minutes.

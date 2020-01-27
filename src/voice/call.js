@@ -1,4 +1,6 @@
 import _ from '../underscore/index';
+import hold from './hold';
+import hangup from './hangup';
 import request from 'request';
 
 
@@ -41,7 +43,23 @@ exports.make = ( to, from, answer_url, duration ) => {
                 }
             } );
         } else {
-            rejected( 'to,from and answer_url type error' )
+            rejected( 'to,from and answer_url type error' );
         }
     } );
 };
+
+exports.hold = ( cmiuuid ) => {
+    return hold.hold( credentials.appid, credentials.secret, cmiuuid );
+}
+
+exports.unhold = ( cmiuuid ) => {
+    return hold.unhold( credentials.appid, credentials.secret, cmiuuid );
+}
+
+exports.toggle = ( cmiuuid ) => {
+    return hold.toggle( credentials.appid, credentials.secret, cmiuuid );
+}
+
+exports.hangup = ( cmiuuid ) => {
+    return hangup.hangup( credentials.appid, credentials.secret, cmiuuid );
+}

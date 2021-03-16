@@ -1,6 +1,6 @@
 {
   "name": "piopiy",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "PIOPIY REST API client for nodejs,It support Voice,SMS and more.",
   "main": "lib/index.js",
   "scripts": {
@@ -36,6 +36,6 @@
     "rimraf": "^3.0.0"
   },
   "dependencies": {
-    "request": "^2.88.0"
+    "axios": "^0.21.1"
   }
 }

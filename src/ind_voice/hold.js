@@ -3,7 +3,7 @@ import axios from 'axios';
 
 
 
-const voice = { host: "https://piopiy.telecmi.com", path: "/v1/call/global_action" };
+const voice = { host: "https://piopiy.telecmi.com", path: "/v1/call/action" };
 const credentials = {};
 
 
@@ -23,11 +23,12 @@ exports.hold = ( appid, secret, cmiuuid ) => {
                 "cmiuid": cmiuuid
             }
 
+
             axios.post( voice.host + voice.path, options ).then( ( res ) => {
                 solved( res.data )
             } ).catch( ( err ) => {
                 rejected( err );
-            } );
+            } )
 
 
         } else {
@@ -50,11 +51,13 @@ exports.unhold = ( appid, secret, cmiuuid ) => {
                 "cmiuid": cmiuuid
             }
 
+
             axios.post( voice.host + voice.path, options ).then( ( res ) => {
                 solved( res.data )
             } ).catch( ( err ) => {
                 rejected( err );
             } );
+
         } else {
             rejected( 'cmiuuid type error' )
         }
@@ -73,6 +76,7 @@ exports.toggle = ( appid, secret, cmiuuid ) => {
                 "action": 'holdToggle',
                 "cmiuid": cmiuuid
             }
+
 
             axios.post( voice.host + voice.path, options ).then( ( res ) => {
                 solved( res.data )

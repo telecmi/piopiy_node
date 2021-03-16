@@ -49,11 +49,20 @@ class PiopiyAction {
         } );
     }
 
-    forward ( to, from, option ) {
+    call ( to, from, option ) {
 
         const bridge = connect.bridge( to, from, option )
 
         this.action.push( bridge );
+
+    }
+
+
+    forward ( to, from, option ) {
+
+        const sip = connect.connect( to, from, option )
+
+        this.action.push( sip );
 
     }
 
@@ -77,4 +86,4 @@ const start = () => {
     return new PiopiyAction();
 }
 
-module.exports = start;
+module.exports = start();

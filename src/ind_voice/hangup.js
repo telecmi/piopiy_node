@@ -3,7 +3,8 @@ import axios from 'axios';
 
 
 
-const voice = { host: "https://piopiy.telecmi.com", path: "/v1/call/global_action" };
+
+const voice = { host: "https://piopiy.telecmi.com", path: "/v1/call/action" };
 const credentials = {};
 
 
@@ -28,7 +29,7 @@ exports.hangup = ( appid, secret, cmiuuid ) => {
                 solved( res.data )
             } ).catch( ( err ) => {
                 rejected( err );
-            } )
+            } );
 
 
         } else {

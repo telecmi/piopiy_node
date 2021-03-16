@@ -1,12 +1,13 @@
 import _ from '../underscore/index';
+import pcmo from './pcmo_call';
+import axios from 'axios';
 import hold from './hold';
 import hangup from './hangup';
-import pcmo from './pcmo_call';
 
 
 
-//const voice = { host: "https://piopiy.telecmi.com", path: "/v1/global_make_call" };
-const voice = { host: "http://localhost:8181", path: "/v1/global_make_call" };
+//const voice = { host: "https://piopiy.telecmi.com", path: "/v1/make_call" };
+const voice = { host: "http://localhost:8181", path: "/v1/make_call" };
 const credentials = {};
 
 
@@ -38,12 +39,12 @@ exports.make = ( to, from, answer_url, duration ) => {
                 rejected( err );
             } )
 
-
         } else {
             rejected( 'to,from and answer_url type error' );
         }
     } );
 };
+
 
 exports.call = ( to, from, forward_to, options ) => {
     return pcmo.make( credentials, to, from, forward_to, options )
@@ -51,11 +52,6 @@ exports.call = ( to, from, forward_to, options ) => {
 
 exports.callPCMO = ( to, from, pcmo_obj, duration ) => {
     return pcmo.makePCMO( credentials, to, from, pcmo_obj, duration )
-};
-
-
-exports.connect = ( to, from, forward_to, options ) => {
-    return pcmo.connect( credentials, to, from, forward_to, options )
 };
 
 exports.hold = ( cmiuuid ) => {

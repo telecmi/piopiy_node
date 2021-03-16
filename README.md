@@ -36,7 +36,36 @@ const piopiy = new Piopiy( 'your_app_id', 'your_app_secret' );
 
 ### Make a call
 
-To make a call, mention the to_number, piopiy_phone_number and <a href="https://doc.telecmi.com/piopiy/docs/configure-url" target="_blank">answer_url</a>.
+
+To make a call , mention the to_number, piopiy_phone_number and .
+
+```javascript
+piopiy.voice.call( 
+    'your_leg_a_to_number', 
+    'your_piopiy_phone_number',
+    'your_leg_b_to_number' 
+).then( ( result  ) => {
+     console.log( result  )
+} ).catch( ( error ) => {
+     console.log( error )
+} );
+```
+
+To make a call using PCMO, mention the to_number, piopiy_phone_number and .
+
+```javascript
+piopiy.voice.callPCMO( 
+    'your_to_number', 
+    'your_piopiy_phone_number',
+    'your_PCMO_Object' 
+).then( ( result  ) => {
+     console.log( result  )
+} ).catch( ( error ) => {
+     console.log( error )
+} );
+```
+
+To make a call with answer, mention the to_number, piopiy_phone_number and <a href="https://doc.telecmi.com/piopiy/docs/configure-url" target="_blank">answer_url</a>.
 
 ```javascript
 piopiy.voice.make( 
@@ -49,6 +78,10 @@ piopiy.voice.make(
      console.log( error )
 } );
 ```
+
+
+
+
 
 ### Hold a call
 

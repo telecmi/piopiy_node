@@ -1,5 +1,6 @@
 
 import voice from './voice/call';
+import ind_voice from './ind_voice/call';
 import _ from './underscore/index';
 import action from './action/action';
 
@@ -15,9 +16,15 @@ class Piopiy {
             this.appid = appid;
             this.secret = secret
             voice.setup( appid, secret );
+            ind_voice.setup( appid, secret );
         } else {
             throw new Error( "appid and secret type error" );
         }
+
+
+        this.voice = voice;
+        this.voiceInd = ind_voice;
+
 
     }
 
@@ -25,13 +32,8 @@ class Piopiy {
 
 
 
-
-Piopiy.prototype.voice = voice;
-
 module.exports = Piopiy;
-
-
-module.exports.Action = action;
+module.exports.Actions = action;
 
 
 

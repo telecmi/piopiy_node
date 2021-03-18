@@ -95,7 +95,7 @@ exports.connect = ( credentials, to, from, forward_to, options ) => {
 };
 
 
-exports.makePCMO = ( credentials, to, from, pcmo, durations ) => {
+exports.makePCMO = ( credentials, to, from, pcmo, options ) => {
 
 
 
@@ -107,11 +107,17 @@ exports.makePCMO = ( credentials, to, from, pcmo, durations ) => {
 
             let duration = durations || 4200;
 
+            if ( _.isObject( options ) ) {
+                duration = options.duration || duration;
+                extra_params = options.extra_params || {};
+            }
+
 
 
             var options_data = {
                 "appid": credentials.appid,
                 "secret": credentials.secret,
+                "extra_params": extra_params,
                 "from": from,
                 "duration": duration,
                 "pcmo": pcmo,

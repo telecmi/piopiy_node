@@ -53,7 +53,7 @@ exports.make = ( credentials, to, from, forward_to, options ) => {
 };
 
 
-exports.makePCMO = ( credentials, to, from, pcmo, durations ) => {
+exports.makePCMO = ( credentials, to, from, pcmo, options ) => {
 
 
 

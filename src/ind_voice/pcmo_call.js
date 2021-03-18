@@ -3,8 +3,8 @@ import axios from 'axios';
 import action from '../action/action';
 
 
-//const voice = { host: "https://piopiy.telecmi.com", path: "/v1/pcmo_make_call" };
-const voice = { host: "http://localhost:8181", path: "/v1/pcmo_make_call" };
+const voice = { host: "https://piopiy.telecmi.com", path: "/v1/pcmo_make_call" };
+//const voice = { host: "http://localhost:8181", path: "/v1/pcmo_make_call" };
 const credentials = {};
 
 
@@ -23,14 +23,17 @@ exports.make = ( credentials, to, from, forward_to, options ) => {
             pcmo.call( forward_to, from, options );
 
             let duration = 4200;
+            let extra_params = {}
 
             if ( _.isObject( options ) ) {
                 duration = options.duration || duration;
+                extra_params = options.extra_params || {};
             }
 
             var options_data = {
                 "appid": credentials.appid,
                 "secret": credentials.secret,
+                "extra_params": extra_params,
                 "from": from,
                 "duration": duration,
                 "pcmo": pcmo.PCMO(),
@@ -61,12 +64,17 @@ exports.makePCMO = ( credentials, to, from, pcmo, durations ) => {
 
 
             let duration = durations || 4200;
+            let extra_params = {}
 
-
+            if ( _.isObject( options ) ) {
+                duration = options.duration || duration;
+                extra_params = options.extra_params || {};
+            }
 
             var options_data = {
                 "appid": credentials.appid,
                 "secret": credentials.secret,
+                "extra_params": extra_params,
                 "from": from,
                 "duration": duration,
                 "pcmo": pcmo,

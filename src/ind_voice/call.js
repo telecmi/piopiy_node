@@ -6,8 +6,8 @@ import hangup from './hangup';
 
 
 
-//const voice = { host: "https://piopiy.telecmi.com", path: "/v1/make_call" };
-const voice = { host: "http://localhost:8181", path: "/v1/make_call" };
+const voice = { host: "https://piopiy.telecmi.com", path: "/v1/make_call" };
+//const voice = { host: "http://localhost:8181", path: "/v1/make_call" };
 const credentials = {};
 
 

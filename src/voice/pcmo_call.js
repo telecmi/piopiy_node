@@ -105,7 +105,7 @@ exports.makePCMO = ( credentials, to, from, pcmo, options ) => {
         if ( _.isNumber( to ) && ( _.isNumber( from ) ) && ( _.isArray( pcmo ) ) ) {
 
 
-            let duration = durations || 4200;
+            let duration = 4200;
 
             if ( _.isObject( options ) ) {
                 duration = options.duration || duration;

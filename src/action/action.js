@@ -82,8 +82,5 @@ class PiopiyAction {
 }
 
 
-const start = () => {
-    return new PiopiyAction();
-}
 
-module.exports = start();
+module.exports = PiopiyAction;

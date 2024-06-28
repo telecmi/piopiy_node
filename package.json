@@ -1,6 +1,6 @@
 {
   "name": "piopiy",
-  "version": "0.8.1",
+  "version": "1.0.1",
   "description": "PIOPIY REST API client for nodejs,It support Voice,SMS and more.",
   "main": "lib/index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "IndiaDID",
     "piopiy"
   ],
-  "author": "PIOPIY",
+  "author": "TeleCMI technologies (P) LTD",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/telecmi/piopiy_node/issues"

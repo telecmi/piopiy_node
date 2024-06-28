@@ -2,7 +2,7 @@
 import voice from './voice/call';
 import ind_voice from './ind_voice/call';
 import _ from './underscore/index';
-import action from './action/action';
+import PiopiyAction from './action/action';
 
 
 
@@ -32,8 +32,10 @@ class Piopiy {
 
 
 
-module.exports = Piopiy;
-module.exports.Actions = action;
+module.exports = {
+    PiopiyAction,
+    Piopiy
+};
 
 
 

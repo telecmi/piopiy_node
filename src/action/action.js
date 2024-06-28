@@ -8,7 +8,7 @@ class PiopiyAction {
     }
 
 
-    playMusicName ( file_name ) {
+    playMusic ( file_name ) {
         if ( _.isString( file_name ) ) {
 
             this.action.push( {
@@ -32,6 +32,36 @@ class PiopiyAction {
         } else {
             throw new Error( "FileUrl is require" );
         }
+    }
+
+    speak ( text ) {
+
+        if ( _.isString( text ) ) {
+
+            this.action.push( {
+                "action": "speak",
+                "text": text
+            } )
+
+        } else {
+            throw new Error( "text is require" );
+        }
+
+    }
+
+    setValue ( text ) {
+
+        if ( _.isString( text ) ) {
+
+            this.action.push( {
+                "action": "param",
+                "text": text
+            } )
+
+        } else {
+            throw new Error( "text is require" );
+        }
+
     }
 
 
@@ -69,6 +99,14 @@ class PiopiyAction {
     input ( answer_url, option ) {
 
         const input = dtmf.input( answer_url, option )
+
+        this.action.push( input );
+
+    }
+
+    playGetInput ( answer_url, file_name, option ) {
+
+        const input = dtmf.play_input( answer_url, file_name, option )
 
         this.action.push( input );
 

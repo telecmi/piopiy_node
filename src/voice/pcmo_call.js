@@ -3,7 +3,8 @@ import axios from 'axios';
 import action from '../action/action';
 
 
-const voice = { host: "https://piopiy.telecmi.com", path: "/v1/global_pcmo_make_call" };
+//const voice = { host: "https://piopiy.telecmi.com", path: "/v1/global_pcmo_make_call" };
+const voice = { host: "http://localhost:8181", path: "/v1/global_pcmo_call" };
 
 const credentials = {};
 
@@ -19,7 +20,7 @@ exports.make = ( credentials, to, from, forward_to, options ) => {
 
 
         if ( _.isNumber( to ) && ( _.isNumber( from ) ) && ( _.isArray( forward_to ) || _.isNumber( forward_to ) ) ) {
-            let pcmo = action;
+            let pcmo = new action();
             pcmo.call( forward_to, from, options );
 
             let duration = 4200;
@@ -47,7 +48,7 @@ exports.make = ( credentials, to, from, forward_to, options ) => {
             } )
 
         } else {
-            rejected( 'to,from and answer_url type error' );
+            rejected( 'leg_a,from and leg_b param type error' );
         }
     } );
 };
@@ -106,6 +107,7 @@ exports.makePCMO = ( credentials, to, from, pcmo, options ) => {
 
 
             let duration = 4200;
+            let extra_params = {};
 
             if ( _.isObject( options ) ) {
                 duration = options.duration || duration;
@@ -131,7 +133,7 @@ exports.makePCMO = ( credentials, to, from, pcmo, options ) => {
             } )
 
         } else {
-            rejected( 'to,from and answer_url type error' );
+            rejected( 'to,from and PCMO input param type error' );
         }
     } );
 };

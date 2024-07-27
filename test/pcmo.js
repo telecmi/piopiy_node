@@ -1,14 +1,12 @@
-var Piopiy = require( '../lib/index' );
+const { Piopiy, PiopiyAction } = require( '../lib/index' );
 
 
 
-var test = new Piopiy.Actions();
+var test = new PiopiyAction();
 
-test.call( [7449], 316044, { duration: 10, timeout: 50, loop: 5, "ring_type": "group" } );
+test.call( [1434534, 1234456], 316044, { duration: 10, timeout: 50, loop: 5, "ring_type": "group" } );
 //test.input( 'https://example.com/action', { timeout: 20, max_digit: 4 } );
 //test.hangup();
 
-
-var hangup = new Piopiy.Actions();
-hangup.hangup()
+console.log( test.PCMO() );
 

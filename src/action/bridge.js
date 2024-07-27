@@ -1,9 +1,9 @@
-import _ from '../underscore/index';
+import { isNumber, isObject, isArray } from '../underscore/index';
 
 
-exports.bridge = ( to, from, option ) => {
+export const bridge = ( to, from, option ) => {
 
-    if ( _.isNumber( from ) && ( _.isArray( to ) || _.isNumber( to ) ) ) {
+    if ( isNumber( from ) && ( isArray( to ) || isNumber( to ) ) ) {
 
         const bridge = {
             "action": "bridge",
@@ -13,7 +13,7 @@ exports.bridge = ( to, from, option ) => {
 
         if ( option ) {
 
-            if ( _.isObject( option ) ) {
+            if ( isObject( option ) ) {
                 bridge.duration = option.duration || 5400;
                 bridge.timeout = option.timeout || 40;
                 bridge.loop = option.loop || 1;
@@ -26,7 +26,7 @@ exports.bridge = ( to, from, option ) => {
             }
         }
 
-        if ( _.isNumber( to ) ) {
+        if ( isNumber( to ) ) {
             bridge.connect.push( { "type": "pstn", "number": to } );
         } else {
             for ( var i in to ) {
@@ -43,9 +43,9 @@ exports.bridge = ( to, from, option ) => {
 }
 
 
-exports.connect = ( to, from, option ) => {
+export const connect = ( to, from, option ) => {
 
-    if ( _.isNumber( from ) && ( _.isArray( to ) || !_.isEmpty( to ) ) ) {
+    if ( isNumber( from ) && ( isArray( to ) || isNumber( to ) ) ) {
 
         const bridge = {
             "action": "connect",
@@ -55,7 +55,7 @@ exports.connect = ( to, from, option ) => {
 
         if ( option ) {
 
-            if ( _.isObject( option ) ) {
+            if ( isObject( option ) ) {
                 bridge.duration = option.duration || 5400;
                 bridge.timeout = option.timeout || 40;
                 bridge.loop = option.loop || 1;
@@ -68,7 +68,7 @@ exports.connect = ( to, from, option ) => {
             }
         }
 
-        if ( _.isNumber( to ) ) {
+        if ( isNumber( to ) ) {
             bridge.connect.push( { "type": "sip", "user": to } );
         } else {
             for ( var i in to ) {

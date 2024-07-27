@@ -1,40 +1,33 @@
-import _ from '../underscore/index';
+import { isString } from '../underscore/index';
 import axios from 'axios';
 
 
 
 const voice = { host: "https://piopiy.telecmi.com", path: "/v1/call/global_action" };
-const credentials = {};
 
 
 
 
-
-exports.hangup = ( appid, secret, cmiuuid ) => {
-    return new Promise( ( solved, rejected ) => {
-
-        if ( _.isString( cmiuuid ) ) {
+export const call_hangup = async ( appid, secret, cmiuuid ) => {
 
 
-            var options = {
-                "appid": appid,
-                "secret": secret,
-                "action": 'hangup',
-                "cmiuid": cmiuuid
-            }
+    if ( isString( cmiuuid ) ) {
 
 
-            axios.post( voice.host + voice.path, options ).then( ( res ) => {
-                solved( res.data )
-            } ).catch( ( err ) => {
-                rejected( err );
-            } )
-
-
-        } else {
-            rejected( 'cmiuuid type error' )
+        var options = {
+            "appid": appid,
+            "secret": secret,
+            "action": 'hangup',
+            "cmiuid": cmiuuid
         }
-    } );
+
+        const response = await axios.post( voice.host + voice.path, options )
+        return response.data;
+
+    } else {
+        throw new Error( 'cmiuuid type error' );
+    }
+
 };
 
 

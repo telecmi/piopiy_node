@@ -1,7 +1,9 @@
-import _ from '../underscore/index';
-import hold from './hold';
-import hangup from './hangup';
-import pcmo from './pcmo_call';
+import { isNumber } from '../underscore/index';
+import { call_hold, call_toggle, call_unhold } from './hold';
+import call_hangup from './hangup';
+import axios from 'axios';
+import { make, makePCMO } from './pcmo_call';
+import { isArray, isUrl } from '../../lib/underscore';
 
 
 
@@ -11,65 +13,74 @@ const credentials = {};
 
 
 
-exports.setup = ( appid, secret ) => {
+const setup = ( appid, secret ) => {
     credentials.appid = appid;
     credentials.secret = secret
 }
 
 
-exports.make = ( to, from, answer_url, duration ) => {
-    return new Promise( ( solved, rejected ) => {
 
-        if ( _.isNumber( to ) && ( _.isNumber( from ) ) && ( _.isUrl( answer_url ) ) ) {
+const create = async ( to, from, answerUrl, duration ) => {
 
+    if ( isNumber( to ) && isNumber( from ) && isUrl( answerUrl ) && isNumber( duration ) ) {
 
-            var options = {
-                "appid": credentials.appid,
-                "secret": credentials.secret,
-                "from": from,
-                "duration": duration,
-                "answer_url": answer_url,
-                "to": to
-            }
-
-            axios.post( voice.host + voice.path, options ).then( ( res ) => {
-                solved( res.data )
-            } ).catch( ( err ) => {
-                rejected( err );
-            } )
+        const options = {
+            appid: credentials.appid,
+            secret: credentials.secret,
+            from: from,
+            duration: duration,
+            answer_url: answerUrl,
+            to: to
+        };
 
 
-        } else {
-            rejected( 'to,from and answer_url type error' );
-        }
-    } );
+        const response = await axios.post( `${voice.host}${voice.path}`, options );
+        return response.data;
+
+    } else {
+        throw new Error( 'Invalid types for to, from, or answer_url' );
+    }
 };
 
-exports.call = ( to, from, forward_to, options ) => {
-    return pcmo.make( credentials, to, from, forward_to, options )
+const call = ( to, from, to_or_pcmo, options ) => {
+
+
+    if ( isArray( to_or_pcmo ) ) {
+
+        return makePCMO( credentials, to, from, to_or_pcmo, options )
+    } else {
+        return make( credentials, to, from, to_or_pcmo, options )
+    }
 };
 
-exports.callPCMO = ( to, from, pcmo_obj, duration ) => {
-    return pcmo.makePCMO( credentials, to, from, pcmo_obj, duration )
+
+const hold = ( cmiuuid ) => {
+    return call_hold( credentials.appid, credentials.secret, cmiuuid );
+}
+
+const unhold = ( cmiuuid ) => {
+    return call_unhold( credentials.appid, credentials.secret, cmiuuid );
+}
+
+const toggle = ( cmiuuid ) => {
+    return call_toggle( credentials.appid, credentials.secret, cmiuuid );
+}
+
+const hangup = ( cmiuuid ) => {
+    return call_hangup( credentials.appid, credentials.secret, cmiuuid );
+}
+
+
+
+const Calls = {
+    setup,
+    create,
+    call,
+    hold,
+    unhold,
+    toggle,
+    hangup
 };
 
-
-exports.connect = ( to, from, forward_to, options ) => {
-    return pcmo.connect( credentials, to, from, forward_to, options )
-};
-
-exports.hold = ( cmiuuid ) => {
-    return hold.hold( credentials.appid, credentials.secret, cmiuuid );
-}
-
-exports.unhold = ( cmiuuid ) => {
-    return hold.unhold( credentials.appid, credentials.secret, cmiuuid );
-}
-
-exports.toggle = ( cmiuuid ) => {
-    return hold.toggle( credentials.appid, credentials.secret, cmiuuid );
-}
-
-exports.hangup = ( cmiuuid ) => {
-    return hangup.hangup( credentials.appid, credentials.secret, cmiuuid );
-}
+// Export the object as the default export
+export default Calls;

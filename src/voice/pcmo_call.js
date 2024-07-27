@@ -1,140 +1,144 @@
-import _ from '../underscore/index';
+import { isNumber, isArray, isObject } from '../underscore/index';
 import axios from 'axios';
 import action from '../action/action';
 
 
-//const voice = { host: "https://piopiy.telecmi.com", path: "/v1/global_pcmo_make_call" };
-const voice = { host: "http://localhost:8181", path: "/v1/global_pcmo_call" };
+const ind_voice = { host: "https://rest.telecmi.com", path: "/v2/ind_pcmo_make_call" };
 
-const credentials = {};
-
+const glob_voice = { host: "https://rest.telecmi.com", path: "/v2/global_pcmo_make_call" };
 
 
 
 
-exports.make = ( credentials, to, from, forward_to, options ) => {
+export const make = async ( credentials, to, from, forward_to, options ) => {
 
+    if ( isNumber( to ) && ( isNumber( from ) ) && ( isArray( forward_to ) || isNumber( forward_to ) ) ) {
+        const pcmo = new action();
+        pcmo.call( forward_to, from, options );
 
+        let duration = 4200;
+        let extra_params = {}
 
-    return new Promise( ( solved, rejected ) => {
-
-
-        if ( _.isNumber( to ) && ( _.isNumber( from ) ) && ( _.isArray( forward_to ) || _.isNumber( forward_to ) ) ) {
-            let pcmo = new action();
-            pcmo.call( forward_to, from, options );
-
-            let duration = 4200;
-            let extra_params = {}
-
-            if ( _.isObject( options ) ) {
-                duration = options.duration || duration;
-                extra_params = options.extra_params || {};
-            }
-
-            var options_data = {
-                "appid": credentials.appid,
-                "secret": credentials.secret,
-                "extra_params": extra_params,
-                "from": from,
-                "duration": duration,
-                "pcmo": pcmo.PCMO(),
-                "to": to
-            }
-
-            axios.post( voice.host + voice.path, options_data ).then( ( res ) => {
-                solved( res.data )
-            } ).catch( ( err ) => {
-                rejected( err );
-            } )
-
-        } else {
-            rejected( 'leg_a,from and leg_b param type error' );
+        if ( isObject( options ) ) {
+            duration = options.duration || duration;
+            extra_params = options.extra_params || {};
         }
-    } );
+
+        var options_data = {
+            "appid": credentials.appid,
+            "secret": credentials.secret,
+            "extra_params": extra_params,
+            "from": from,
+            "duration": duration,
+            "pcmo": pcmo.PCMO(),
+            "to": to
+        }
+
+        const voice = isIND( to ) ? ind_voice : glob_voice;
+
+
+        const response = await axios.post( voice.host + voice.path, options_data )
+        return response.data;
+
+
+    } else {
+        throw new Error( 'leg_a,from and leg_b param type error' );
+    }
+
 };
 
 
-exports.connect = ( credentials, to, from, forward_to, options ) => {
+export const connect = async ( credentials, to, from, forward_to, options ) => {
 
+    if ( isNumber( to ) && ( isNumber( from ) ) && ( isArray( forward_to ) || isNumber( forward_to ) ) ) {
+        const pcmo = action;
+        pcmo.forward( forward_to, from, options );
 
+        let duration = 4200;
+        let extra_params = {}
 
-    return new Promise( ( solved, rejected ) => {
-
-
-        if ( _.isNumber( to ) && ( _.isNumber( from ) ) && ( _.isArray( forward_to ) || !_.isEmpty( forward_to ) ) ) {
-            let pcmo = action;
-            pcmo.forward( forward_to, from, options );
-
-            let duration = 4200;
-            let extra_params = {}
-
-            if ( _.isObject( options ) ) {
-                duration = options.duration || duration;
-                extra_params = options.extra_params || {};
-            }
-
-            var options_data = {
-                "appid": credentials.appid,
-                "secret": credentials.secret,
-                "extra_params": extra_params,
-                "from": from,
-                "duration": duration,
-                "pcmo": pcmo.PCMO(),
-                "to": to
-            }
-
-            axios.post( voice.host + voice.path, options_data ).then( ( res ) => {
-                solved( res.data )
-            } ).catch( ( err ) => {
-                rejected( err );
-            } )
-
-        } else {
-            rejected( 'to,from and answer_url type error' );
+        if ( isObject( options ) ) {
+            duration = options.duration || duration;
+            extra_params = options.extra_params || {};
         }
-    } );
+
+        var options_data = {
+            "appid": credentials.appid,
+            "secret": credentials.secret,
+            "extra_params": extra_params,
+            "from": from,
+            "duration": duration,
+            "pcmo": pcmo.PCMO(),
+            "to": to
+        }
+
+        const voice = isIND( to ) ? ind_voice : glob_voice;
+
+        const response = await axios.post( voice.host + voice.path, options_data )
+        return response.data;
+
+
+    } else {
+        throw new Error( 'to,from and answer_url type error' );
+    }
+
 };
 
 
-exports.makePCMO = ( credentials, to, from, pcmo, options ) => {
+export const makePCMO = async ( credentials, to, from, pcmo, options ) => {
 
 
 
-    return new Promise( ( solved, rejected ) => {
 
 
-        if ( _.isNumber( to ) && ( _.isNumber( from ) ) && ( _.isArray( pcmo ) ) ) {
+    if ( isNumber( to ) && ( isNumber( from ) ) && ( isArray( pcmo ) ) ) {
 
 
-            let duration = 4200;
-            let extra_params = {};
+        let duration = 4200;
+        let extra_params = {};
 
-            if ( _.isObject( options ) ) {
-                duration = options.duration || duration;
-                extra_params = options.extra_params || {};
-            }
-
-
-
-            var options_data = {
-                "appid": credentials.appid,
-                "secret": credentials.secret,
-                "extra_params": extra_params,
-                "from": from,
-                "duration": duration,
-                "pcmo": pcmo,
-                "to": to
-            }
-
-            axios.post( voice.host + voice.path, options_data ).then( ( res ) => {
-                solved( res.data )
-            } ).catch( ( err ) => {
-                rejected( err );
-            } )
-
-        } else {
-            rejected( 'to,from and PCMO input param type error' );
+        if ( isObject( options ) ) {
+            duration = options.duration || duration;
+            extra_params = options.extra_params || {};
         }
-    } );
+
+
+
+        var options_data = {
+            "appid": credentials.appid,
+            "secret": credentials.secret,
+            "extra_params": extra_params,
+            "from": from,
+            "duration": duration,
+            "pcmo": pcmo,
+            "to": to
+        }
+
+
+        const voice = isIND( to ) ? ind_voice : glob_voice;
+
+        const response = await axios.post( voice.host + voice.path, options_data )
+        return response.data;
+
+
+    } else {
+        throw new Error( 'to,from and PCMO input param type error' );
+    }
+
 };
+
+
+const isIND = ( number ) => {
+    number = number.toString();
+    const cleanedNumber = number.replace( /[\s\-()]/g, '' );
+
+    // Check if the number starts with '+91' or '91' (considering country code without '+')
+    if ( cleanedNumber.startsWith( '+91' ) ) {
+        return true;
+    } else if ( cleanedNumber.startsWith( '91' ) ) {
+        return true;
+    }
+
+    return false;
+}
 

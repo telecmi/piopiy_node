@@ -1,26 +1,29 @@
 
 
-exports.isString = ( obj ) => {
-    return !!( obj === '' || ( obj && obj.charCodeAt && obj.substr ) );
+export const isString = ( obj ) => {
+    return Boolean( obj === '' || ( obj && obj.charCodeAt && obj.substr ) );
 }
 
-exports.isNumber = ( obj ) => {
-    return ( obj === +obj ) || ( toString.call( obj ) === '[object Number]' );
+export const isNumber = ( obj ) => {
+    return ( obj === Number( obj ) ) || ( toString.call( obj ) === '[object Number]' );
 };
 
-exports.isUrl = ( string ) => {
+export const isUrl = ( string ) => {
     try {
         new URL( string );
         return true;
-    } catch ( _ ) {
-        return false;
+
+    } catch ( e ) {
+        if ( e )
+            return false;
     }
 }
 
-exports.isArray = ( no ) => {
+export const isArray = ( no ) => {
     return Array.isArray( no );
 }
 
-exports.isObject = ( obj ) => {
+
+export const isObject = ( obj ) => {
     return obj !== undefined && obj !== null && obj.constructor == Object;
 }

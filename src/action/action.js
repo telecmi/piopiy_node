@@ -1,124 +1,81 @@
-import _ from '../underscore/index';
-import connect from './bridge';
-import dtmf from './input';
+import { isString, isUrl } from '../underscore/index';
+import { bridge, connect } from './bridge';
+import { play_input, input } from './input';
 
 class PiopiyAction {
     constructor() {
         this.action = [];
     }
 
+    playMusic ( filename_or_url ) {
 
-    playMusic ( file_name ) {
-        if ( _.isString( file_name ) ) {
+        const supportedExtensions = /\.(mp3|wav)$/i;
 
-            this.action.push( {
-                "action": "play",
-                "file_name": file_name
-            } )
-
+        if ( isString( filename_or_url ) && isUrl( filename_or_url ) && supportedExtensions.test( filename_or_url ) ) {
+            this.action.push( { action: "play", file_url: filename_or_url } );
+        } else if ( isString( filename_or_url ) && supportedExtensions.test( filename_or_url ) ) {
+            this.action.push( { action: "play", file_name: filename_or_url } );
         } else {
-            throw new Error( "Filename is require" );
+            throw new Error( "Filename or File URL is required and must be a mp3/WAV format." );
         }
+
+
     }
 
-    playMusicURL ( file_url ) {
-        if ( _.isUrl( file_url ) ) {
 
-            this.action.push( {
-                "action": "play",
-                "file_url": file_url
-            } )
-
-        } else {
-            throw new Error( "FileUrl is require" );
-        }
-    }
 
     speak ( text ) {
-
-        if ( _.isString( text ) ) {
-
-            this.action.push( {
-                "action": "speak",
-                "text": text
-            } )
-
+        if ( isString( text ) ) {
+            this.action.push( { action: "speak", text } );
         } else {
-            throw new Error( "text is require" );
+            throw new Error( "Text is required and must be a string." );
         }
-
     }
 
     setValue ( text ) {
-
-        if ( _.isString( text ) ) {
-
-            this.action.push( {
-                "action": "param",
-                "text": text
-            } )
-
+        if ( isString( text ) ) {
+            this.action.push( { action: "param", text } );
         } else {
-            throw new Error( "text is require" );
+            throw new Error( "Text is required and must be a string." );
         }
-
     }
 
-
     hangup () {
-
-        this.action.push( {
-            "action": "hangup"
-        } );
-
+        this.action.push( { action: "hangup" } );
     }
 
     record () {
-        this.action.push( {
-            "action": "record"
-        } );
+        this.action.push( { action: "record" } );
     }
 
     call ( to, from, option ) {
-
-        const bridge = connect.bridge( to, from, option )
-
-        this.action.push( bridge );
-
+        const cmi_bridge = bridge( to, from, option );
+        this.action.push( cmi_bridge );
     }
-
 
     forward ( to, from, option ) {
-
-        const sip = connect.connect( to, from, option )
-
+        const sip = connect( to, from, option );
         this.action.push( sip );
-
     }
 
-    input ( answer_url, option ) {
+    input ( answerUrl, option ) {
+        const cmi_input = input( answerUrl, option );
+        this.action.push( cmi_input );
+    }
 
-        const input = dtmf.input( answer_url, option )
-
+    playGetInput ( answerUrl, fileName, option ) {
+        const input = play_input( answerUrl, fileName, option );
         this.action.push( input );
-
     }
-
-    playGetInput ( answer_url, file_name, option ) {
-
-        const input = dtmf.play_input( answer_url, file_name, option )
-
-        this.action.push( input );
-
-    }
-
 
     PCMO () {
         return this.action;
     }
 
+    clear () {
+        this.action = [];
+        return true;
+    }
 }
 
-
-
-module.exports = PiopiyAction;
+export default PiopiyAction;

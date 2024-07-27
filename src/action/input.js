@@ -1,9 +1,9 @@
-import _ from '../underscore/index';
+import { isUrl, isObject, isString } from '../underscore/index';
 
 
-exports.input = ( action_url, option ) => {
+export const input = ( action_url, option ) => {
 
-    if ( _.isUrl( action_url ) ) {
+    if ( isUrl( action_url ) ) {
 
         const input = {
             "action": "input",
@@ -11,7 +11,7 @@ exports.input = ( action_url, option ) => {
         }
 
         if ( option ) {
-            if ( _.isObject( option ) ) {
+            if ( isObject( option ) ) {
                 input.max_digit = option.max_digit || 1;
                 input.timeout = option.timeout || 5;
             }
@@ -25,9 +25,9 @@ exports.input = ( action_url, option ) => {
 
 }
 
-exports.play_input = ( action_url, file_name, option ) => {
+export const play_input = ( action_url, file_name, option ) => {
 
-    if ( ( _.isUrl( action_url ) ) && ( _.isString( file_name ) ) ) {
+    if ( ( isUrl( action_url ) ) && ( isString( file_name ) ) ) {
 
         const input = {
             "action": "play_get_input",
@@ -35,8 +35,13 @@ exports.play_input = ( action_url, file_name, option ) => {
             "action_url": action_url
         }
 
+        if ( isUrl( file_name ) ) {
+            input.file_url = file_name;
+            delete input.file_name;
+        }
+
         if ( option ) {
-            if ( _.isObject( option ) ) {
+            if ( isObject( option ) ) {
                 input.max_digit = option.max_digit || 1;
                 input.max_retry = option.max_retry || 1;
                 input.timeout = option.timeout || 5;

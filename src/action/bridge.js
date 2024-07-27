@@ -17,7 +17,6 @@ export const bridge = ( to, from, option ) => {
                 bridge.duration = option.duration || 5400;
                 bridge.timeout = option.timeout || 40;
                 bridge.loop = option.loop || 1;
-                bridge.record = option.record || false;
 
                 if ( option.ring_type == 'group' ) {
                     bridge.ring_type = option.ring_type

@@ -163,10 +163,6 @@ piopiy.voice.call(
 
 ---
 
-Sure, let's focus specifically on the PCMO (Piopiy Call Management Object) aspect of the `call()` method. Here's an explanation centered around PCMO, detailing its purpose, how to use it, and the relevant parameters:
-
----
-
 ## PCMO (Piopiy Call Management Object)
 
 The PCMO is a powerful tool that enables you to define specific actions to be executed during a call. These actions can include playing audio files, collecting user input, speaking text, and more.

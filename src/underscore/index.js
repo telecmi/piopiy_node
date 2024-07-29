@@ -23,6 +23,22 @@ export const isArray = ( no ) => {
     return Array.isArray( no );
 }
 
+export const isJsonArray = ( obj ) => {
+    try {
+
+        if ( obj[0].action ) {
+            return true;
+        } else {
+            return false;
+        }
+
+    } catch ( e ) {
+        if ( e )
+            return false;
+
+    }
+}
+
 
 export const isObject = ( obj ) => {
     return obj !== undefined && obj !== null && obj.constructor == Object;

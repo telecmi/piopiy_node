@@ -1,4 +1,4 @@
-import { isNumber } from '../underscore/index';
+import { isNumber, isJsonArray } from '../underscore/index';
 import { call_hold, call_toggle, call_unhold } from './hold';
 import call_hangup from './hangup';
 import axios from 'axios';
@@ -44,10 +44,12 @@ const create = async ( to, from, answerUrl, duration ) => {
 
 const call = ( to, from, to_or_pcmo, options ) => {
 
-
     if ( isArray( to_or_pcmo ) ) {
-
-        return makePCMO( credentials, to, from, to_or_pcmo, options )
+        if ( isJsonArray( to_or_pcmo ) ) {
+            return makePCMO( credentials, to, from, to_or_pcmo, options )
+        } else {
+            return make( credentials, to, from, to_or_pcmo, options )
+        }
     } else {
         return make( credentials, to, from, to_or_pcmo, options )
     }

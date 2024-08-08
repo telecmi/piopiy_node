@@ -1,5 +1,6 @@
 import { isString, isUrl } from '../underscore/index';
 import { bridge, connect } from './bridge';
+import { streaming } from './stream';
 import { play_input, input } from './input';
 
 class PiopiyAction {
@@ -38,6 +39,11 @@ class PiopiyAction {
         } else {
             throw new Error( "Text is required and must be a string." );
         }
+    }
+
+    stream ( url, options ) {
+        const stream_obj = streaming( url, options );
+        this.action.push( stream_obj );
     }
 
     hangup () {

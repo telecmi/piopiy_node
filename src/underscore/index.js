@@ -43,3 +43,13 @@ export const isJsonArray = ( obj ) => {
 export const isObject = ( obj ) => {
     return obj !== undefined && obj !== null && obj.constructor == Object;
 }
+
+export const isWS = ( url ) => {
+    try {
+        const regex = /^wss?:\/\/([a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*|\[[0-9a-fA-F:]+\])(:\d+)?(\/.*)?$/;
+        return regex.test( url );
+    } catch ( e ) {
+        if ( e )
+            return false;
+    }
+}

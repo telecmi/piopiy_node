@@ -10,6 +10,6 @@ const test = new PiopiyAction();
 
 
 
-test.stream( 'wss://ed53-202-21-44-91.ngrok-free.app/webhook/stream', { listen_mode: 'calle', voice_quality: '8000' } );
+test.stream( 'wss://ed53-202-21-44-91.ngrok-free.app/webhook/stream', { listen_mode: 'calle', voice_quality: '8000', stream_on_answer: true } );
 
 console.log( test.action );

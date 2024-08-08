@@ -14,6 +14,11 @@ export const streaming = ( url, options ) => {
                 stream_obj.voice_quality = options.voice_quality;
             }
 
+            if ( options.stream_on_answer ) {
+                stream_obj.stream_on_answer = options.stream_on_answer;
+            }
+
+
         }
         return stream_obj;
     } else {

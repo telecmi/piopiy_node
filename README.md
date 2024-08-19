@@ -2,7 +2,7 @@
 
 ## Overview
 
-Piopiy API provides a comprehensive Node.js SDK for managing and controlling voice interactions using our PCMO Actions. This SDK allows developers to integrate voice functionalities such as making calls, playing audio, recording, and more into their Node.js applications.
+Piopiy API provides a comprehensive Node.js SDK for managing and controlling voice interactions using our PCMO Actions. This SDK allows developers to integrate voice functionalities such as making calls, playing audio, recording, Real Time Streaming and more into their Node.js applications.
 
 ## PCMO Features
 
@@ -11,6 +11,7 @@ Piopiy API provides a comprehensive Node.js SDK for managing and controlling voi
 - **Play Music**: Stream audio files or URLs during a call.
 - **Text-to-Speech**: Convert text to speech during a call.
 - **Set Values and Inputs**: Set custom values and collect user inputs.
+- **Stream Audio**: Stream audio via WebSocket during a call.
 - **Record Calls**: Record voice calls.
 - **Hangup Calls**: Terminate calls programmatically.
 
@@ -117,7 +118,6 @@ action.playMusic('https://example.com/your_music_file.wav');
 piopiy.voice.call(
   9194xxxxxx,         // first number to connect
   9180xxxxxx,         // Callerid
-  9180xxxxxx,         // second number to connect
   action.PCMO(),        // PCMO actions to execute during the call
   {
     duration: 30,       // (Optional) Maximum duration of the call in seconds
@@ -132,7 +132,44 @@ piopiy.voice.call(
 });
 ```
 
-### 3. Handling Multiple Numbers
+### 3.Streaming Audio During a Call
+
+To stream audio during a call using WebSocket:
+
+```javascript
+const test = new PiopiyAction();
+
+test.stream(
+  "wss://your-websocket-url/webhook/stream",
+  {
+    listen_mode: "callee", // Options: 'caller', 'callee', 'both'
+    voice_quality: "8000", // Audio quality: '8000', '16000', '32000'
+    stream_on_answer: true, // Whether to start streaming on call answer
+  }
+);
+
+piopiy.voice
+  .call(
+    9194xxxxxx, // first number to connect
+    9180xxxxxx, // Caller ID
+    9180xxxxxx, // second number to connect
+    test.PCMO(), // PCMO actions, including streaming
+    {
+      duration: 30, // (Optional) Maximum duration of the call in seconds
+      timeout: 40, // (Optional) Time to wait for the call to be answered
+      loop: 1, // (Optional) Number of retry attempts if call is not answered
+      record: true, // (Optional) Whether to record the call
+    }
+  )
+  .then((res) => {
+    console.log("Call with streaming connected, answer URL:", res);
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
+```
+
+### 4. Handling Multiple Numbers
 
 To attempt connecting a call to multiple numbers sequentially:
 

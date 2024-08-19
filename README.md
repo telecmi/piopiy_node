@@ -152,7 +152,6 @@ piopiy.voice
   .call(
     9194xxxxxx, // first number to connect
     9180xxxxxx, // Caller ID
-    9180xxxxxx, // second number to connect
     test.PCMO(), // PCMO actions, including streaming
     {
       duration: 30, // (Optional) Maximum duration of the call in seconds

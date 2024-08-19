@@ -1,9 +1,7 @@
 import { isString, isUrl } from '../underscore/index';
 import { bridge, connect } from './bridge';
 import { streaming } from './stream';
-import { play_input, input } from './input';
-
-class PiopiyAction {
+class StreamAction {
     constructor() {
         this.action = [];
     }
@@ -64,24 +62,26 @@ class PiopiyAction {
         this.action.push( sip );
     }
 
-    input ( answerUrl, option ) {
-        const cmi_input = input( answerUrl, option );
-        this.action.push( cmi_input );
+    pause () {
+        return JSON.stringify( { action: 'pause' } );
     }
 
-    playGetInput ( answerUrl, fileName, option ) {
-        const input = play_input( answerUrl, fileName, option );
-        this.action.push( input );
+    resume () {
+        return JSON.stringify( { action: 'resume' } );
     }
+
+    stop () {
+        return JSON.stringify( { action: 'stop' } );
+    }
+
 
     PCMO () {
-        return this.action;
+        const pcmo = this.action;
+        this.action = [];
+        return JSON.stringify( pcmo );
     }
 
-    clear () {
-        this.action = [];
-        return true;
-    }
+
 }
 
-export default PiopiyAction;
+export default StreamAction;

@@ -2,6 +2,7 @@
 import voice from './voice/call';
 import { isNumber, isString } from './underscore/index';
 import PiopiyAction from './action/action';
+import StreamAction from './action/stream_action';
 
 
 
@@ -26,6 +27,7 @@ class Piopiy {
 
 export {
     PiopiyAction,
+    StreamAction,
     Piopiy
 };
 

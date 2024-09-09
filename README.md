@@ -42,19 +42,17 @@ const {Piopiy, PiopiyAction} = require("piopiy");
 
 const piopiy = new Piopiy("your appid", "your app token");
 
-//Call two number with custome caller id
-piopiy.voice
-        .call("first_phone_number", "piopiy_callerid", "second_phone_number", {
-                loop: 1,
-                timeout: 40,
-                duration: 30,
-        })
-        .then((res) => {
-                console.log(res);
-        })
-        .catch((error) => {
-                console.log(error);
-        });
+//Call two number with custom caller id
+const basic_call = async () => {
+        const response = await piopiy.voice.call(
+                "first_phone_number",
+                "piopiy_callerid",
+                "second_phone_number",
+                {loop: 1, timeout: 40, duration: 30}
+        );
+};
+
+basic_call();
 
 //Call and perform PCMO action
 var action = new PiopiyAction();
@@ -65,23 +63,21 @@ action.playGetInput(
         {max_digit: 3, max_retry: 2}
 );
 
-piopiy.voice
-        .call("dest_phone_number", "piopiy_callerid", action.PCMO(), {
-                loop: 1,
-                timeout: 40,
-                duration: 30,
-        })
-        .then((res) => {
-                console.log(res);
-        })
-        .catch((error) => {
-                console.log(error);
-        });
+const pcmo_call = async () => {
+        const response = await piopiy.voice.call(
+                "dest_phone_number",
+                "piopiy_callerid",
+                action.PCMO(),
+                {loop: 1, timeout: 40, duration: 30}
+        );
+};
+
+pcmo_call();
 ```
 
 ## Make Call
 
-The call() method in the Piopiy Node.js SDK is designed to handle different types of call interactions. It supports connecting two numbers, handling multiple numbers, and executing PCMO (Programmable Call Media Operations) actions during a call.
+The call() method in the Piopiy Node.js SDK is designed to handle different types of call interactions. It supports connecting two numbers, handling multiple numbers, and executing PCMO (PIOPIY Call Management Object) actions during a call.
 
 ## Usage
 
@@ -90,21 +86,13 @@ The call() method in the Piopiy Node.js SDK is designed to handle different type
 To initiate a call between two numbers:
 
 ```javascript
-piopiy.voice.call(
-  9194xxxxxx,         // first number to connect
-  9180xxxxxx,         // Callerid
-  9180xxxxxx,         // second number to connect
-  {
-    duration: 30,       // (Optional) Maximum duration of the call in seconds
-    timeout: 40,        // (Optional) Time to wait for the call to be answered
-    loop: 1,            // (Optional) Number of retry attempts if call is not answered
-    record: true        // (Optional) Whether to record the call
-  }
-).then(res => {
-  console.log('Call connected, answer URL:',resl);
-}).catch(error => {
-  console.error('Error:', error);
-});
+const basic_call = async () =>{
+
+const res = await piopiy.voice.call(9194xxxxxx, 9180xxxxxx, 9180xxxxxx, {duration: 30,timeout: 40,loop: 1,record: true})
+
+}
+
+basic_call()
 ```
 
 ### 2. Making a Call with PCMO Actions
@@ -112,24 +100,17 @@ piopiy.voice.call(
 To make a call and perform specific PCMO actions, such as playing an audio file:
 
 ```javascript
-// Define PCMO actions
+const test = new PiopiyAction();
+
 action.playMusic('https://example.com/your_music_file.wav');
 
-piopiy.voice.call(
-  9194xxxxxx,         // first number to connect
-  9180xxxxxx,         // Callerid
-  action.PCMO(),        // PCMO actions to execute during the call
-  {
-    duration: 30,       // (Optional) Maximum duration of the call in seconds
-    timeout: 40,        // (Optional) Time to wait for the call to be answered
-    loop: 1,            // (Optional) Number of retry attempts if call is not answered
-    record: true        // (Optional) Whether to record the call
-  }
-).then(res => {
-  console.log('Call with PCMO actions connected, answer URL:', res);
-}).catch(error => {
-  console.error('Error:', error);
-});
+const pcmo_call = async () =>{
+
+const res = await piopiy.voice.call(9194xxxxxx,9180xxxxxx,action.PCMO(),{duration: 30,timeout: 40,loop: 1,record: true})
+
+}
+
+pcmo_call()
 ```
 
 ### 3.Streaming Audio During a Call
@@ -139,33 +120,15 @@ To stream audio during a call using WebSocket:
 ```javascript
 const test = new PiopiyAction();
 
-test.stream(
-  "wss://your-websocket-url/webhook/stream",
-  {
-    listen_mode: "callee", // Options: 'caller', 'callee', 'both'
-    voice_quality: "8000", // Audio quality: '8000', '16000', '32000'
-    stream_on_answer: true, // Whether to start streaming on call answer
-  }
-);
+test.stream("wss://your-websocket-url/webhook/stream",{ listen_mode: "callee", voice_quality:"8000", stream_on_answer: true});
 
-piopiy.voice
-  .call(
-    9194xxxxxx, // first number to connect
-    9180xxxxxx, // Caller ID
-    test.PCMO(), // PCMO actions, including streaming
-    {
-      duration: 30, // (Optional) Maximum duration of the call in seconds
-      timeout: 40, // (Optional) Time to wait for the call to be answered
-      loop: 1, // (Optional) Number of retry attempts if call is not answered
-      record: true, // (Optional) Whether to record the call
-    }
-  )
-  .then((res) => {
-    console.log("Call with streaming connected, answer URL:", res);
-  })
-  .catch((error) => {
-    console.error("Error:", error);
-  });
+const ai_stream = async () => {
+
+const res = await piopiy.voice.call(9194xxxxxx,9180xxxxxx,test.PCMO(),{duration: 30,timeout: 40,loop: 1,record: true})
+
+}
+
+ai_stream()
 ```
 
 ### 4. Handling Multiple Numbers
@@ -173,21 +136,15 @@ piopiy.voice
 To attempt connecting a call to multiple numbers sequentially:
 
 ```javascript
-piopiy.voice.call(
-  9194xxxxxx,         // first number to connect
-  9180xxxxxx,         // Callerid
-  [9180xxxxx, 9196xxxx], // Array of second numbers connect
-  {
-    duration: 30,       // (Optional) Maximum duration of the call in seconds
-    timeout: 40,        // (Optional) Time to wait for each call to be answered
-    loop: 1,            // (Optional) Number of retry attempts for each number
-    record: true        // (Optional) Whether to record the call
-  }
-).then(res => {
-  console.log('Call to multiple numbers connected, answer URL:', res);
-}).catch(error => {
-  console.error('Error:', error);
-});
+
+const multi_call = async () => {
+
+ const res = await piopiy.voice.call(9194xxxxxx,9180xxxxxx,[9180xxxxx, 9196xxxx],{duration: 30,timeout: 40,loop: 1,record: true})
+
+}
+
+multi_call()
+
 ```
 
 ### `options` (Object) - Optional
@@ -299,25 +256,16 @@ var action = new PiopiyAction();
 
 ### Using PCMO in a Call
 
-After defining the desired actions, use the `action.PCMO()` method to pass them to the `call()` method:
+After defining the desired actions, use the `action.PCMO()` method to pass them to the `call()` method
 
 ```javascript
-piopiy.voice.call(
-  9194xxxxxx,         // first number to connect
-  9180xxxxxx,         // Callerid
-  9180xxxxxx,         // second number to connect
-  action.PCMO(),         // PCMO actions
-  {
-    duration: 30,        // (Optional) Maximum duration of the call in seconds
-    timeout: 40,         // (Optional) Time to wait for the call to be answered
-    loop: 1,             // (Optional) Number of retry attempts if call is not answered
-    record: true         // (Optional) Whether to record the call
-  }
-).then(answer_url => {
-  console.log('Call with PCMO actions connected, answer URL:', answer_url);
-}).catch(error => {
-  console.error('Error:', error);
-});
+const pcmo_call = async () =>{
+
+const res = await piopiy.voice.call(9194xxxxxx,9180xxxxxx,action.PCMO(),{duration: 30,timeout: 40,loop: 1,record: true})
+
+}
+
+pcmo_call()
 ```
 
 ### PCMO Method Parameters
@@ -369,6 +317,15 @@ piopiy.voice.call(
            - `record` (Boolean): Whether to record the call.
 
 9. **clear()**
+
       - No parameters. Clears all defined actions.
+
+10. **stream(url, options)**
+
+       - `url` (String): The WebSocket URL to stream the audio.
+       - `options` (Object): Optional settings:
+            - `listen_mode` (String): Specifies whose audio is streamed. Options: `'caller'`, `'callee'`, or `'both'`.
+            - `voice_quality` (String): The audio quality. Options: `'8000'`, `'16000'`.
+            - `stream_on_answer` (Boolean): Whether to start streaming only when the call is answered. Default is `true`.
 
 ---

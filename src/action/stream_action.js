@@ -1,6 +1,8 @@
 import { isString, isUrl } from '../underscore/index';
 import { bridge, connect } from './bridge';
 import { streaming } from './stream';
+import { playBase64Audio } from './play_stream';
+
 class StreamAction {
     constructor() {
         this.action = [];
@@ -72,6 +74,11 @@ class StreamAction {
 
     stop () {
         return JSON.stringify( { action: 'stop' } );
+    }
+
+    playStream ( audio_base64, audio_type, sample_rate ) {
+        const play_stream = playBase64Audio( audio_base64, audio_type, sample_rate );
+        return play_stream;
     }
 
 

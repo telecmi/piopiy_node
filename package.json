@@ -1,6 +1,6 @@
 {
   "name": "piopiy",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "PIOPIY REST API client for nodejs,It support Voice,SMS,WhatsApp and MLAudio.",
   "main": "lib/index.js",
   "scripts": {

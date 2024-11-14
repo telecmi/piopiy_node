@@ -76,6 +76,10 @@ class StreamAction {
         return JSON.stringify( { action: 'stop' } );
     }
 
+    interrupt () {
+        return JSON.stringify( { action: 'break' } );
+    }
+
     playStream ( audio_base64, audio_type, sample_rate ) {
         const play_stream = playBase64Audio( audio_base64, audio_type, sample_rate );
         return play_stream;

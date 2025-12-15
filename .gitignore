@@ -1,1 +1,8 @@
 node_modules
+lib/
+dist/
+coverage/
+.DS_Store
+.env
+*.log
+verify_ai.js

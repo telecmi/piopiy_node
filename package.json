@@ -1,7 +1,7 @@
 {
   "name": "piopiy",
-  "version": "1.0.8",
-  "description": "PIOPIY REST API client for nodejs,It support Voice,SMS,WhatsApp and MLAudio.",
+  "version": "1.0.9",
+  "description": "The official Node.js SDK for PIOPIY - a complete Voice AI Agent and CPaaS Platform. Easily build intelligent Voice Agents, manage complex call flows (queues, human handoff), execute bulk voice campaigns, and send multi-channel notifications via WhatsApp and SMS.",
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,10 +14,13 @@
     "url": "git+https://github.com/telecmi/piopiy_node.git"
   },
   "keywords": [
-    "voice",
-    "SMS",
-    "IndiaDID",
-    "piopiy"
+    "voice ai",
+    "CPaaS platform",
+    "TeleCMI",
+    "PIOPIY",
+    "voice-ai-agent",
+    "cpaas-platform",
+    "human-handoff"
   ],
   "author": "TeleCMI Communication Inc",
   "license": "MIT",

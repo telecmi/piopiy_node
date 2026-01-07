@@ -3,9 +3,9 @@ import axios from 'axios';
 
 const voice = { host: "https://rest.piopiy.com", path: "/v3" };
 
-export const call_hangup = async (auth, call_id, reason, cause = "NORMAL_CLEARING") => {
+export const call_hangup = async ( auth, call_id, reason, cause = "NORMAL_CLEARING" ) => {
 
-    if (isString(call_id)) {
+    if ( isString( call_id ) ) {
 
         const payload = {
             call_id: call_id,
@@ -20,7 +20,7 @@ export const call_hangup = async (auth, call_id, reason, cause = "NORMAL_CLEARIN
             }
         };
 
-        const url = `${voice.host}${voice.path}/voice/ai/hangup`; // Assuming common hangup uses this endpoint, or verify if it's just /voice/hangup? 
+        const url = `${voice.host}${voice.path}/voice/call/hangup`; // Assuming common hangup uses this endpoint, or verify if it's just /voice/hangup? 
         // User pointed to "hangup is common" but initially gave JSON for "voice agent call" context. 
         // I will stick to what worked (`verify_ai.js` used `/voice/ai/hangup`) unless corrected.
 
@@ -29,11 +29,11 @@ export const call_hangup = async (auth, call_id, reason, cause = "NORMAL_CLEARIN
         // But user said "see call only for ai but hangup is common" + "we completed ly changed new version".
         // I will use `/voice/ai/hangup` as the specific endpoint that I verified worked with that payload.
 
-        const response = await axios.post(url, payload, config);
+        const response = await axios.post( url, payload, config );
         return response.data;
 
     } else {
-        throw new Error('call_id type error');
+        throw new Error( 'call_id type error' );
     }
 
 };

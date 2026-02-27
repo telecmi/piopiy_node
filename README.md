@@ -1,165 +1,152 @@
+# Piopiy Node.js SDK
 
-piopiy
-======
+Production-ready Node.js SDK for Piopiy Voice Orchestrator APIs. Build AI voice agents, direct voice calls, PCMO flows, and flow-based call routing.
 
-The official Node.js SDK for PIOPIY - a complete Voice AI Agent and CPaaS Platform. Easily build intelligent Voice Agents, manage complex call flows (queues, human handoff), execute bulk voice campaigns, and send multi-channel notifications via WhatsApp and SMS.
+## Prerequisites
 
-Installation
-------------
-`npm install piopiy`
+- Node.js 14 or higher
+- A Piopiy account and API token (from [Piopiy Dashboard](https://piopiy.com))
 
+## Installation
 
-Usage
------
+```bash
+npm install piopiy
+```
 
-### Authentication
-
-Initialize the client with your API Token.
+## Quick Start
 
 ```javascript
 const { Piopiy } = require('piopiy');
-const client = new Piopiy("YOUR_API_TOKEN");
+
+const client = new Piopiy(process.env.PIOPIY_TOKEN || "YOUR_BEARER_TOKEN");
 ```
 
-### AI Voice Agent
+## Main Examples
 
-Make an AI-powered voice call.
+### 1) AI Single Call
 
 ```javascript
-const options = {
-    options: {
-        max_duration_sec: 80, // Set max call duration
-        record: true          // Enable recording
-    },
-    variables: {
-        customer_id: "CUST_1001", // Custom variables for the AI Agent
-        campaign: "summer_sale_2025",
-        priority: 2
-    }
-};
-
-client.ai.call("9198xxxxxx", "9198xxxxxx", "YOUR_AGENT_ID", options)
-    .then(res => {
-        console.log("Call Initiated:", res);
-    })
-    .catch(err => {
-        console.error("Error:", err);
+async function main() {
+    const response = await client.ai.call({
+        caller_id: "919999999999",
+        to_number: "918888888888",
+        agent_id: "bdd32bcb-767c-40a5-be4a-5f45eeb348a6"
     });
+    console.log(response);
+}
+
+main().catch(console.error);
 ```
 
-#### Arguments
+Example code: [`example/ai_agent/02_ai_call_minimal.js`](example/ai_agent/02_ai_call_minimal.js)
 
-| Argument | Type | Description |
-| :--- | :--- | :--- |
-| `to` | String | Destination number (e.g., "9198xxxxxx"). Pattern: `^[1-9][0-9]{6,15}$` |
-| `caller_id` | String | Caller ID (e.g., "9198xxxxxx"). Pattern: `^[1-9][0-9]{6,15}$` |
-| `agent_id` | String | The UUID of the AI Agent to connect. |
-| `options` | Object | Optional settings and variables. |
-
-#### Options Object
-
-| Key | Type | Description |
-| :--- | :--- | :--- |
-| `max_duration_sec` | Number | Maximum call duration in seconds (30 - 7200). |
-| `ring_timeout_sec` | Number | Ring timeout in seconds (5 - 120). |
-| `record` | Boolean | Set `true` to record the call. |
-
-#### Variables Object
-
-Pass custom data to your AI Agent. Keys must match the pattern `^[A-Za-z_][A-Za-z0-9_]*$`.
-
-### Hangup Call (AI)
-
-Terminate an active AI call.
+### 2) AI Call With Failover
 
 ```javascript
-client.voice.hangup("call_uuid", "NO_BALANCE", "NORMAL_CLEARING")
-    .then(res => {
-        console.log(res);
-    })
-    .catch(err => {
-        console.error(err);
+async function main() {
+    const response = await client.ai.call({
+        caller_id: "919999999999",
+        to_number: "918888888888",
+        agent_id: "bdd32bcb-767c-40a5-be4a-5f45eeb348a6",
+        app_id: "your_app_id",
+        failover: {
+            agent_id: "2f2ae3ad-7ff6-4011-b10e-9ca1f8f8d1a2",
+            ring_timeout_sec: 20,
+            machine_detection: true
+        }
     });
+    console.log(response);
+}
+
+main().catch(console.error);
 ```
 
-| Argument | Type | Description |
-| :--- | :--- | :--- |
-| `call_id` | String | The unique UUID of the call to hang up. |
-| `reason` | String | Custom reason for the hangup (e.g., "NO_BALANCE"). |
-| `cause` | String | SIP hangup cause (default: "NORMAL_CLEARING"). |
+Failover rules:
+- `app_id` is required when `failover` is used.
+- `failover.agent_id` is required.
+- Failover agent must differ from primary `agent_id`.
+- `failover.strategy` is optional.
 
+Example code: [`example/ai_agent/04_ai_call_with_failover.js`](example/ai_agent/04_ai_call_with_failover.js)
 
-### PCMO (Programmable Call Media Operations)
-
-Create complex call flows using `PiopiyAction`.
+### 3) Voice Direct Call
 
 ```javascript
-const { PiopiyAction } = require('piopiy');
-const action = new PiopiyAction();
+async function main() {
+    const response = await client.voice.call({
+        caller_id: "919999999999",
+        to_number: "918888888888",
+        app_id: "your_app_id"
+    });
+    console.log(response);
+}
 
-// Example: Play a music file
-action.playMusic("https://example.com/welcome.mp3");
-
-// Example: Speak text
-action.speak("Hello, welcome to Piopiy.");
-
-// Generate PCMO array
-console.log(action.PCMO());
+main().catch(console.error);
 ```
 
-#### Available Methods
+Example code: [`example/voice_call/01_voice_call_direct.js`](example/voice_call/01_voice_call_direct.js)
 
-**`playMusic(audioFileOrUrl)`**
-Play an audio file (.mp3 or .wav).
-- `audioFileOrUrl`: URL or filename of the audio.
+### 4) PCMO Simple Call
 
-**`speak(text)`**
-Convert text to speech.
-- `text`: The text to speak.
+```javascript
+async function main() {
+    const pipeline = client.pcmo.pipeline()
+        .connect(
+            { caller_id: "919999999999" },
+            [{ type: "pstn", number: "918888888888" }]
+        )
+        .build();
 
-**`input(url, options)`**
-Collect DTMF input from the user.
-- `url`: The webhook URL to send the digits to.
-- `options`:
-    - `max_digit`: Max digits to collect.
-    - `timeout`: Timeout in seconds.
+    const response = await client.pcmo.call({
+        caller_id: "919999999999",
+        to_number: "918888888888",
+        app_id: "your_app_id",
+        pipeline
+    });
+    console.log(response);
+}
 
-**`playGetInput(url, audioFileOrUrl, options)`**
-Play an audio file and then collect input.
-- `url`: Webhook URL for the input.
-- `audioFileOrUrl`: Audio to play.
-- `options`: `max_digit`, `retry`, `timeout`.
+main().catch(console.error);
+```
 
-**`call(to, caller_id, options)`**
-Bridge the call to another number (PSTN).
-- `to`: Number or array of numbers to call.
-- `caller_id`: Caller ID.
-- `options`: `duration`, `timeout`, `loop`, `ring_type` ('group').
+Example code: [`example/pcmo_call/02_pcmo_call_minimal.js`](example/pcmo_call/02_pcmo_call_minimal.js)
 
-**`forward(to, caller_id, options)`**
-Connect the call to a SIP user.
-- `to`: SIP user or array of users.
-- `caller_id`: Caller ID.
-- `options`: `duration`, `timeout`, `loop`, `record`, `ring_type`.
+### 5) Flow Call (Minimal)
 
-**`stream(url, options)`**
-Stream call audio to a WebSocket URL.
-- `url`: WebSocket URL (ws:// or wss://).
-- `options`:
-    - `listen_mode`: 'caller', 'callee', or 'both'.
-    - `stream_on_answer`: Boolean.
+```javascript
+async function main() {
+    const response = await client.flow.call({
+        flow_id: "7f4d89c7-3485-45c5-9016-f45a47cd885c",
+        org_id: "f89dd77d-c226-4ff2-b88c-6d7e4f5a88e2",
+        caller_id: "919999999999",
+        to_number: "918888888888",
+        app_id: "your_app_id"
+    });
+    console.log(response);
+}
 
-**`record()`**
-Start recording the call.
+main().catch(console.error);
+```
 
-**`hangup()`**
-Hangup the call.
+Example code: [`example/flow_call.js`](example/flow_call.js)
 
-**`setValue(text)`**
-Set a custom parameter/value for the flow.
+## Other Actions And Full Docs
 
-**`clear()`**
-Clear the current action list.
+- AI transfer/hangup + full AI docs: [`docs/examples/ai_agent/README.md`](docs/examples/ai_agent/README.md)
+- Voice transfer/hangup + full voice docs: [`docs/examples/voice_call/README.md`](docs/examples/voice_call/README.md)
+- PCMO call/transfer + full pipeline docs: [`docs/examples/pcmo_call/README.md`](docs/examples/pcmo_call/README.md)
+- Flow call docs: [`docs/examples/flow_call/README.md`](docs/examples/flow_call/README.md)
 
+## Extra Example Code Indexes
 
-For more comprehensive documentation, visit [piopiy.com](https://piopiy.com).
+- AI examples: [`example/ai_agent`](example/ai_agent)
+- Voice examples: [`example/voice_call`](example/voice_call)
+- PCMO examples: [`example/pcmo_call`](example/pcmo_call)
+- Flow example: [`example/flow_call.js`](example/flow_call.js)
+
+## Legacy Action Helpers
+
+This package also exports legacy helpers used by older integrations:
+- `PiopiyAction`
+- `StreamAction`
+- `PipelineBuilder`

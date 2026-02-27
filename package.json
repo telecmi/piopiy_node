@@ -1,7 +1,7 @@
 {
   "name": "piopiy",
-  "version": "1.1.0",
-  "description": "The official Node.js SDK for PIOPIY - a complete Voice AI Agent and CPaaS Platform. Easily build intelligent Voice Agents, manage complex call flows (queues, human handoff), execute bulk voice campaigns, and send multi-channel notifications via WhatsApp and SMS.",
+  "version": "1.2.0",
+  "description": "The official Node.js SDK for Piopiy Voice Orchestrator APIs. Build AI voice agents, direct voice calls, PCMO flows, and flow-based call routing.",
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
